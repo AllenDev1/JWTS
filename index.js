@@ -7,7 +7,7 @@ require("./db");
 const registerRouter = require("./routes/register")
 const authRouters = require("./routes/auth")
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use("/api",registerRouter);
 app.use("/api",authRouters);
