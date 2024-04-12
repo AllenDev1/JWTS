@@ -109,12 +109,13 @@ router.post("/auth", async (req, res) => {
   try {
     // Query the database to find the user by username
     const getUserQuery = `
-      SELECT * FROM users
-      WHERE username = ?
-    `;
+          SELECT id, password_hash FROM users
+          WHERE username = ?
+        `;
+    // Execute the query
     const [user] = await db.query(getUserQuery, [username]);
 
-    // If user doesn't exist, return authentication failure
+    // Check if any user is found
     if (!user) {
       return res.status(401).json({ error: "Authentication failed" });
     }
@@ -129,9 +130,9 @@ router.post("/auth", async (req, res) => {
 
     // Log the authentication request
     const insertAuthLogQuery = `
-      INSERT INTO auth_logs (request_ip, user_id)
-      VALUES (?, ?)
-    `;
+          INSERT INTO auth_logs (request_ip, user_id)
+          VALUES (?, ?)
+        `;
     await db.query(insertAuthLogQuery, [req.ip, user.id]);
 
     // Authentication successful
